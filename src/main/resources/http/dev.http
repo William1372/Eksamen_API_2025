@@ -1,0 +1,152 @@
+### SECURITY ENDPOINTS
+
+### Test server connection
+GET {{url}}/auth/test/
+Accept: application/json
+
+### Register new user
+POST {{url}}/auth/register/
+Content-Type: application/json
+
+{
+  "username": "user12",
+  "password": "test123"
+}
+
+### Login user and store JWT
+POST {{url}}/auth/login/
+Content-Type: application/json
+
+{
+  "username": "user12",
+  "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token saved:", client.global.get("jwt_token"));
+%}
+
+### User-protected endpoint
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Admin-protected endpoint (for admins only)
+GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Promote current user to ADMIN
+POST {{url}}/auth/user/addrole/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "role": "admin"
+}
+
+
+
+### CANDIDATE ENDPOINTS
+
+### Create a new candidate
+POST {{url}}/candidates
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "candidateName": "William Danø",
+  "candidatePhoneNumber": "31520223",
+  "candidateEducation": "Datamatiker"
+}
+
+> {%
+    client.global.set("candidate_id", response.body.id);
+    console.log("Candidate created with ID:", client.global.get("candidate_id"));
+%}
+
+### Get candidate by ID
+GET {{url}}/candidates/1
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Update candidate
+PUT {{url}}/candidates/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "candidateName": "William Updated",
+  "candidatePhoneNumber": "99999999",
+  "candidateEducation": "Software Engineering"
+}
+
+### Get all candidates
+GET {{url}}/candidates
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Delete candidate
+DELETE {{url}}/candidates/1
+Authorization: Bearer {{jwt_token}}
+
+
+
+### SKILL ENDPOINTS
+
+### Populate skill table manually (ADMIN only)
+GET {{url}}/skills/populate
+Authorization: Bearer {{jwt_token}}
+
+### Fetch and update skills from external API
+GET {{url}}/skills/fetch
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Get all skills
+GET {{url}}/skills
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Get single skill
+GET {{url}}/skills/1
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Create new skill
+POST {{url}}/skills
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "skillName": "TypeScript",
+  "skillCategory": "FRONTEND",
+  "skillDescription": "Superset of JavaScript",
+  "slug": "typescript"
+}
+
+### Update skill
+PUT {{url}}/skills/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "skillName": "TypeScript Updated",
+  "skillCategory": "FRONTEND",
+  "skillDescription": "Modern JS superset with static typing",
+  "slug": "typescript"
+}
+
+### Delete skill
+DELETE {{url}}/skills/1
+Authorization: Bearer {{jwt_token}}
+
+
+
+### REPORT ENDPOINTS
+
+### Get top candidates ranked by popularity
+GET {{url}}/reports/candidates/top-by-popularity
+Accept: application/json
+Authorization: Bearer {{jwt_token}}

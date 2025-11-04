@@ -1,0 +1,18 @@
+package dat.security.exceptions;
+
+public class NotAuthorizedException extends RuntimeException {
+    private final int statusCode;
+
+    public NotAuthorizedException(int statusCode, String message) {
+        super(message);
+        this.statusCode = statusCode;
+    }
+    public NotAuthorizedException(int statusCode, String message, Throwable cause) {
+        super(message, cause);
+        this.statusCode = statusCode;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+}
